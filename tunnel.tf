@@ -9,7 +9,7 @@ locals {
 resource "cloudflare_zero_trust_tunnel_cloudflared_config" "gateway" {
   count = local.manage_tunnel ? 1 : 0
 
-  account_id = var.account_id
+  account_id = var.account_xyz
   tunnel_id  = var.tunnel_id
 
   config = {
