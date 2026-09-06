@@ -67,6 +67,21 @@ CF-Access-Client-Secret: <client_secret>
 Authorization: Bearer <GATEWAY_API_TOKEN>
 ```
 
+## Running locally / Terraform Cloud
+
+**Currently local by default.** The optional `cloud {}` block in `versions.tf` is commented out, so `terraform init` uses local state.
+
+If you later enable HCP Terraform by uncommenting that block (org/workspace of your choosing; placeholder name `foss-cloudflare-infrastructure`), detach again for local runs as follows:
+
+1. Comment out the entire `cloud { ... }` block in `versions.tf` again.
+2. `rm -rf .terraform`
+3. `terraform init` (local state)
+4. Provide variables locally (`local.secrets.tfvars` / `TF_VAR_*`) — TFC workspace variables are **not** used when detached.
+
+Optional: while still attached, `terraform state pull > terraform.tfstate` before detaching, then confirm with `terraform state list`. Keep state files **gitignored**.
+
+Do not apply from both TFC and local against the same resources without coordinating state. Never commit credentials, secrets tfvars, or state files.
+
 ## Repo provisioning
 
 GitHub repository is created by [`terraform-github-open-ott-play`](https://github.com/open-ott-play) / org IaC (`foss-cloudflare-infrastructure`).
