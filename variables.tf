@@ -1,19 +1,22 @@
-variable "cloudflare_api_token" {
-  description = "Cloudflare API token with Zero Trust Access (and Tunnel Edit if manage_tunnel_config=true). Prefer env CLOUDFLARE_API_TOKEN."
+# --- Cloudflare auth (matches rules_lists; typically from TF_VAR_* in bashrc) ---
+
+variable "account_xyz" {
+  description = "Cloudflare Account ID."
+  type        = string
+}
+
+variable "email_xyz" {
+  description = "Cloudflare Email"
+  type        = string
+}
+
+variable "key_xyz" {
+  description = "Cloudflare Key (Global API Key)"
   type        = string
   sensitive   = true
-  default     = ""
 }
 
-variable "account_id" {
-  description = "Cloudflare account ID (Zero Trust / Access lives here)"
-  type        = string
-}
-
-variable "team_name" {
-  description = "Zero Trust team name (subdomain of *.cloudflareaccess.com), e.g. alvit"
-  type        = string
-}
+# --- Access application ---
 
 variable "gateway_public_hostname" {
   description = "Public hostname for the Victron / inverter-gateway Access app"
@@ -23,7 +26,7 @@ variable "gateway_public_hostname" {
 variable "access_app_name" {
   description = "Access application display name"
   type        = string
-  default     = "victron-gateway"
+  default     = "victron"
 }
 
 variable "access_session_duration" {
@@ -32,9 +35,20 @@ variable "access_session_duration" {
   default     = "24h"
 }
 
+variable "team_name" {
+  description = "Zero Trust team name (subdomain of *.cloudflareaccess.com), e.g. alvit"
+  type        = string
+}
+
 variable "allow_emails" {
   description = "Emails allowed by the browser Allow policy"
   type        = list(string)
+}
+
+variable "allow_policy_name" {
+  description = "Name of the reusable Allow policy (match dashboard if importing)"
+  type        = string
+  default     = "victron"
 }
 
 variable "service_token_name" {
@@ -56,7 +70,7 @@ variable "secrets_output_path" {
 }
 
 variable "manage_tunnel_config" {
-  description = "If true, manage tunnel ingress JWT enforce for the gateway hostname. Requires tunnel_id and replaces managed ingress entry carefully — review plan."
+  description = "If true, manage tunnel ingress JWT enforce for the gateway hostname. Requires tunnel_id — review plan carefully (can replace other ingresses)."
   type        = bool
   default     = false
 }
@@ -74,7 +88,7 @@ variable "tunnel_origin_service" {
 }
 
 variable "gateway_api_token" {
-  description = "Optional: inverter-gateway bearer token to store beside Access secrets for desktop (NOT a Cloudflare secret)"
+  description = "Optional: inverter-gateway bearer token to store beside Access secrets for desktop"
   type        = string
   sensitive   = true
   default     = ""

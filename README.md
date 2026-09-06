@@ -27,11 +27,15 @@ terraform plan  -var-file=local.secrets.tfvars
 terraform apply -var-file=local.secrets.tfvars
 ```
 
-API token scopes (minimum):
+Auth matches `rules_lists`: Global API Key via bashrc (auto-picked by Terraform):
 
-- Account → Zero Trust → Access: **Apps and Policies** Edit
-- Account → Zero Trust → Access: **Service Tokens** Edit
-- If `manage_tunnel_config=true`: Cloudflare Tunnel Edit
+```bash
+export TF_VAR_account_xyz=...
+export TF_VAR_email_xyz=...
+export TF_VAR_key_xyz=...
+```
+
+Or set `account_xyz` / `email_xyz` / `key_xyz` in `local.secrets.tfvars` (never commit).
 
 ## Existing dashboard resources
 
